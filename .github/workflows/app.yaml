@@ -1,0 +1,16 @@
+name: app
+
+on:
+  pull_request:
+    paths:
+      - "src/**"
+      - ".github/workflows/app.yaml"
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v7
+      - run: uv sync --locked
+      - run: uv run python -m compileall -q src
