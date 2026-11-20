@@ -21,3 +21,12 @@ class SeriesMetadata(BaseModel):
     first_air_date: date | None = None
     genres: list[str] = []
     vote_average: Decimal | None = None
+
+class MovieMetadata(BaseModel):
+    id: int
+    title: str
+    overview: str | None = None
+    release_date: date | None = None
+    runtime: int | None = None
+    genres: list[str] = []
+    vote_average: Decimal | None = None

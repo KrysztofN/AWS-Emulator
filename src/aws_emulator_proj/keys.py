@@ -31,3 +31,13 @@ class EpisodeKey:
 
     def sk(self) -> str:
         return f"SEASON#{self.season_number:02d}#EPISODE#{self.episode_number:03d}"
+
+class MovieKey:
+    def __init__(self, movie_id: int):
+        self.movie_id = movie_id
+
+    def pk(self) -> str:
+        return f"MOVIE#{self.movie_id}"
+
+    def sk(self) -> str:
+        return "METADATA"
