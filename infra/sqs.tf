@@ -1,5 +1,6 @@
 resource "aws_sqs_queue" "uploads" {
-  name = "media-uploads"
+  name                       = "media-uploads"
+  visibility_timeout_seconds = 180
 }
 
 resource "aws_sqs_queue_policy" "uploads" {
