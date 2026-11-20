@@ -4,6 +4,9 @@ on:
   pull_request:
     paths:
       - "src/**"
+      - "scripts/**"
+      - "pyproject.toml"
+      - "uv.lock"
       - ".github/workflows/app.yaml"
 
 jobs:
