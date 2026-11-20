@@ -4,3 +4,4 @@
 *.tfstate.backup
 __pycache__/
 .venv
+build/
