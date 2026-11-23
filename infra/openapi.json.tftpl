@@ -37,6 +37,17 @@
           "httpMethod": "POST",
           "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${get_function_arn}/invocations"
         }
+      },
+      "delete": {
+        "parameters": [
+          { "name": "movie_id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": { "204": { "description": "Deleted" } },
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${delete_function_arn}/invocations"
+        }
       }
     },
     "/series/{series_id}": {
@@ -73,6 +84,17 @@
           "type": "aws_proxy",
           "httpMethod": "POST",
           "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${get_function_arn}/invocations"
+        }
+      },
+      "delete": {
+        "parameters": [
+          { "name": "series_id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": { "204": { "description": "Deleted" } },
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${delete_function_arn}/invocations"
         }
       }
     },
@@ -112,6 +134,18 @@
           "type": "aws_proxy",
           "httpMethod": "POST",
           "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${get_function_arn}/invocations"
+        }
+      },
+      "delete": {
+        "parameters": [
+          { "name": "series_id", "in": "path", "required": true, "schema": { "type": "string" } },
+          { "name": "season_number", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": { "204": { "description": "Deleted" } },
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${delete_function_arn}/invocations"
         }
       }
     },
@@ -153,6 +187,19 @@
           "type": "aws_proxy",
           "httpMethod": "POST",
           "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${get_function_arn}/invocations"
+        }
+      },
+      "delete": {
+        "parameters": [
+          { "name": "series_id", "in": "path", "required": true, "schema": { "type": "string" } },
+          { "name": "season_number", "in": "path", "required": true, "schema": { "type": "string" } },
+          { "name": "episode_number", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": { "204": { "description": "Deleted" } },
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${delete_function_arn}/invocations"
         }
       }
     }

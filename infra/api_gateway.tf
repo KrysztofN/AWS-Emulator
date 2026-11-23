@@ -41,6 +41,7 @@ resource "aws_api_gateway_rest_api" "media" {
     put_queue_name       = aws_sqs_queue.put.name
     api_gateway_role_arn = aws_iam_role.api_gateway.arn
     get_function_arn     = aws_lambda_function.get.arn
+    delete_function_arn  = aws_lambda_function.delete.arn
   })
 }
 
