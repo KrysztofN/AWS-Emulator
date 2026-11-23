@@ -29,13 +29,130 @@
       },
       "get": {
         "parameters": [
-            { "name": "movie_id", "in": "path", "required": true, "schema": { "type": "string" } }
+          { "name": "movie_id", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
         "responses": { "200": { "description": "OK" } },
         "x-amazon-apigateway-integration": {
-            "type": "aws_proxy",
-            "httpMethod": "POST",
-            "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${get_function_arn}/invocations"
+          "type": "aws_proxy",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${get_function_arn}/invocations"
+        }
+      }
+    },
+    "/series/{series_id}": {
+      "put": {
+        "parameters": [
+          { "name": "series_id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "202": { "description": "Accepted" }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "aws",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:us-east-1:sqs:path/${account_id}/${put_queue_name}",
+          "credentials": "${api_gateway_role_arn}",
+          "requestParameters": {
+            "integration.request.header.Content-Type": "'application/x-www-form-urlencoded'"
+          },
+          "requestTemplates": {
+            "application/json": "Action=SendMessage&MessageBody=$util.urlEncode($input.body)&MessageAttribute.1.Name=type&MessageAttribute.1.Value.DataType=String&MessageAttribute.1.Value.StringValue=series&MessageAttribute.2.Name=series_id&MessageAttribute.2.Value.DataType=String&MessageAttribute.2.Value.StringValue=$util.urlEncode($input.params('series_id'))"
+          },
+          "passthroughBehavior": "never",
+          "responses": {
+            "default": { "statusCode": "202" }
+          }
+        }
+      },
+      "get": {
+        "parameters": [
+          { "name": "series_id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "OK" } },
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${get_function_arn}/invocations"
+        }
+      }
+    },
+    "/series/{series_id}/season/{season_number}": {
+      "put": {
+        "parameters": [
+          { "name": "series_id", "in": "path", "required": true, "schema": { "type": "string" } },
+          { "name": "season_number", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "202": { "description": "Accepted" }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "aws",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:us-east-1:sqs:path/${account_id}/${put_queue_name}",
+          "credentials": "${api_gateway_role_arn}",
+          "requestParameters": {
+            "integration.request.header.Content-Type": "'application/x-www-form-urlencoded'"
+          },
+          "requestTemplates": {
+            "application/json": "Action=SendMessage&MessageBody=$util.urlEncode($input.body)&MessageAttribute.1.Name=type&MessageAttribute.1.Value.DataType=String&MessageAttribute.1.Value.StringValue=season&MessageAttribute.2.Name=series_id&MessageAttribute.2.Value.DataType=String&MessageAttribute.2.Value.StringValue=$util.urlEncode($input.params('series_id'))&MessageAttribute.3.Name=season_number&MessageAttribute.3.Value.DataType=String&MessageAttribute.3.Value.StringValue=$util.urlEncode($input.params('season_number'))"
+          },
+          "passthroughBehavior": "never",
+          "responses": {
+            "default": { "statusCode": "202" }
+          }
+        }
+      },
+      "get": {
+        "parameters": [
+          { "name": "series_id", "in": "path", "required": true, "schema": { "type": "string" } },
+          { "name": "season_number", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "OK" } },
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${get_function_arn}/invocations"
+        }
+      }
+    },
+    "/series/{series_id}/season/{season_number}/episode/{episode_number}": {
+      "put": {
+        "parameters": [
+          { "name": "series_id", "in": "path", "required": true, "schema": { "type": "string" } },
+          { "name": "season_number", "in": "path", "required": true, "schema": { "type": "string" } },
+          { "name": "episode_number", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "202": { "description": "Accepted" }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "aws",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:us-east-1:sqs:path/${account_id}/${put_queue_name}",
+          "credentials": "${api_gateway_role_arn}",
+          "requestParameters": {
+            "integration.request.header.Content-Type": "'application/x-www-form-urlencoded'"
+          },
+          "requestTemplates": {
+            "application/json": "Action=SendMessage&MessageBody=$util.urlEncode($input.body)&MessageAttribute.1.Name=type&MessageAttribute.1.Value.DataType=String&MessageAttribute.1.Value.StringValue=episode&MessageAttribute.2.Name=series_id&MessageAttribute.2.Value.DataType=String&MessageAttribute.2.Value.StringValue=$util.urlEncode($input.params('series_id'))&MessageAttribute.3.Name=season_number&MessageAttribute.3.Value.DataType=String&MessageAttribute.3.Value.StringValue=$util.urlEncode($input.params('season_number'))&MessageAttribute.4.Name=episode_number&MessageAttribute.4.Value.DataType=String&MessageAttribute.4.Value.StringValue=$util.urlEncode($input.params('episode_number'))"
+          },
+          "passthroughBehavior": "never",
+          "responses": {
+            "default": { "statusCode": "202" }
+          }
+        }
+      },
+      "get": {
+        "parameters": [
+          { "name": "series_id", "in": "path", "required": true, "schema": { "type": "string" } },
+          { "name": "season_number", "in": "path", "required": true, "schema": { "type": "string" } },
+          { "name": "episode_number", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "OK" } },
+        "x-amazon-apigateway-integration": {
+          "type": "aws_proxy",
+          "httpMethod": "POST",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${get_function_arn}/invocations"
         }
       }
     }
