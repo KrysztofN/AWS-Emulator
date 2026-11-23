@@ -146,7 +146,7 @@ resource "aws_iam_role_policy" "get_lambda" {
     Statement = [
       {
         Effect   = "Allow"
-        Action   = "dynamodb:GetItem"
+        Action   = ["dynamodb:GetItem", "dynamodb:Query"]
         Resource = aws_dynamodb_table.media.arn
       },
       {

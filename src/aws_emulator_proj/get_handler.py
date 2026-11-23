@@ -8,15 +8,24 @@ repository = MediaRepository(os.environ["TABLE_NAME"])
 
 
 def handler(event, context):
-    movie_id = event["pathParameters"]["movie_id"]
-    if not movie_id.isdigit():
-        return response(400, {"message": "movie_id must be a number"})
+    parameters = event["pathParameters"]
+    if not all(value.isdigit() for value in parameters.values()):
+        return response(400, {"message": "Path parameters must be numbers"})
+    ids = {name: int(value) for name, value in parameters.items()}
 
-    movie = repository.get_movie(int(movie_id))
-    if movie is None:
-        return response(404, {"message": "Movie not found"})
+    resource = event["resource"]
+    if resource == "/movies/{movie_id}":
+        item = repository.get_movie(ids["movie_id"])
+    elif resource == "/series/{series_id}":
+        item = repository.get_series(ids["series_id"])
+    elif resource == "/series/{series_id}/season/{season_number}":
+        item = repository.get_season(ids["series_id"], ids["season_number"])
+    else:
+        item = repository.get_episode(ids["series_id"], ids["season_number"], ids["episode_number"])
 
-    return response(200, movie)
+    if item is None:
+        return response(404, {"message": "Not found"})
+    return response(200, item)
 
 
 def response(status_code, body):
