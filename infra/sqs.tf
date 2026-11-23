@@ -21,3 +21,8 @@ resource "aws_sqs_queue_policy" "uploads" {
     ]
   })
 }
+
+resource "aws_sqs_queue" "put" {
+  name                       = "media-put"
+  visibility_timeout_seconds = 180
+}
