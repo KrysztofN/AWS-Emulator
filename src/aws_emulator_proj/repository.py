@@ -1,6 +1,8 @@
 import boto3
 from aws_emulator_proj.keys import EpisodeKey, MovieKey, SeasonKey, SeriesKey
 
+INTERNAL_FIELDS = ["PK", "SK", "GSI1PK", "GSI1SK", "entity_type"]
+
 class MediaRepository:
     def __init__(self, table_name:str):
         self.table = boto3.resource("dynamodb").Table(table_name)
@@ -29,3 +31,14 @@ class MediaRepository:
         item.update(metadata)
         item.update(extra)
         self.table.put_item(Item = item)
+    
+    def get_movie(self, movie_id: int) -> dict | None:
+        return self._get(MovieKey(movie_id))
+
+    def _get(self, key) -> dict | None:
+        item = self.table.get_item(Key={"PK": key.pk(), "SK": key.sk()}).get("Item")
+        if item is None:
+            return None
+        for field in INTERNAL_FIELDS:
+            item.pop(field, None)
+        return item
