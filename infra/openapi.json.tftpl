@@ -26,6 +26,17 @@
             "default": { "statusCode": "202" }
           }
         }
+      },
+      "get": {
+        "parameters": [
+            { "name": "movie_id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "OK" } },
+        "x-amazon-apigateway-integration": {
+            "type": "aws_proxy",
+            "httpMethod": "POST",
+            "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${get_function_arn}/invocations"
+        }
       }
     }
   }
