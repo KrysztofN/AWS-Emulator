@@ -1,13 +1,12 @@
 from pydantic import BaseModel
 from datetime import date
-from decimal import Decimal
 
 class EpisodeMetadata(BaseModel):
     name: str
     overview: str | None = None
     air_date: date | None = None
     runtime: int | None = None
-    vote_average: Decimal | None = None
+    vote_average: float | None = None
 
 class SeasonMetadata(BaseModel):
     name: str
@@ -20,7 +19,7 @@ class SeriesMetadata(BaseModel):
     overview: str | None = None
     first_air_date: date | None = None
     genres: list[str] = []
-    vote_average: Decimal | None = None
+    vote_average: float | None = None
 
 class MovieMetadata(BaseModel):
     id: int
@@ -29,4 +28,4 @@ class MovieMetadata(BaseModel):
     release_date: date | None = None
     runtime: int | None = None
     genres: list[str] = []
-    vote_average: Decimal | None = None
+    vote_average: float | None = None
