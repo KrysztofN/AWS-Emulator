@@ -22,7 +22,7 @@ resource "aws_sqs_queue_policy" "uploads" {
       Action    = "sqs:SendMessage"
       Resource  = aws_sqs_queue.uploads.arn
       Condition = {
-        ArnEquals = { "aws:SourceArn" = aws_s3_bucket.media.arn }
+        ArnEquals = { "aws:SourceArn" = aws_s3_bucket.media_files.arn }
       }
     }]
   })

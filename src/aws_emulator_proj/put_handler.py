@@ -9,13 +9,9 @@ repository = MediaRepository(os.environ["TABLE_NAME"])
 
 def handler(event, context):
     for record in event["Records"]:
-        try:
-            save(record)
-        except (KeyError, ValueError, TypeError) as error:
-            logger.error("Rejected invalid message", extra={"error": repr(error)})
+        save(record)
 
-
-def save(record):
+def save(record: dict) -> None:
     attributes = record["messageAttributes"]
     entity_type = attributes["type"]["stringValue"]
     metadata = json.loads(record["body"], parse_float=Decimal)
@@ -25,9 +21,7 @@ def save(record):
     elif entity_type == "series":
         repository.put_series(number(attributes, "series_id"), metadata)
     elif entity_type == "season":
-        repository.put_season(
-            number(attributes, "series_id"), number(attributes, "season_number"), metadata
-        )
+        repository.put_season(number(attributes, "series_id"), number(attributes, "season_number"), metadata)
     elif entity_type == "episode":
         repository.put_episode(
             number(attributes, "series_id"),
@@ -41,5 +35,5 @@ def save(record):
     logger.info("Saved", extra={"type": entity_type})
 
 
-def number(attributes, name):
+def number(attributes: dict, name: str) -> int:
     return int(attributes[name]["stringValue"])
