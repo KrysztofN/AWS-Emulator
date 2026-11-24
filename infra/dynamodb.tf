@@ -1,10 +1,10 @@
 resource "aws_dynamodb_table" "media" {
-  name         = "media"
-  billing_mode = "PAY_PER_REQUEST"
-  stream_enabled = true
+  name             = "media"
+  billing_mode     = "PAY_PER_REQUEST"
+  stream_enabled   = true
   stream_view_type = "KEYS_ONLY"
-  hash_key     = "PK"
-  range_key    = "SK"
+  hash_key         = "PK"
+  range_key        = "SK"
 
   attribute {
     name = "PK"
