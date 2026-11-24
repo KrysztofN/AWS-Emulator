@@ -299,6 +299,64 @@ resource "aws_lambda_permission" "api_gateway_delete" {
   source_arn    = "arn:aws:execute-api:us-east-1:${local.account_id}:${aws_api_gateway_rest_api.media.id}/*"
 }
 
+# Stream lambda
+resource "aws_iam_role" "stream_lambda" {
+  name = "stream-lambda"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect    = "Allow"
+      Principal = { Service = "lambda.amazonaws.com" }
+      Action    = "sts:AssumeRole"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy" "stream_lambda" {
+  role = aws_iam_role.stream_lambda.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = ["dynamodb:DescribeStream", "dynamodb:GetRecords", "dynamodb:GetShardIterator", "dynamodb:ListStreams"]
+        Resource = aws_dynamodb_table.media.stream_arn
+      },
+      {
+        Effect   = "Allow"
+        Action   = ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_lambda_function" "stream" {
+  function_name    = "stream"
+  role             = aws_iam_role.stream_lambda.arn
+  handler          = "aws_emulator_proj.stream_handler.handler"
+  runtime          = "python3.12"
+  filename         = data.archive_file.placeholder.output_path
+  source_code_hash = data.archive_file.placeholder.output_base64sha256
+
+  environment {
+    variables = {
+      POWERTOOLS_SERVICE_NAME = "stream"
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [filename, source_code_hash]
+  }
+}
+
+resource "aws_lambda_event_source_mapping" "stream" {
+  event_source_arn  = aws_dynamodb_table.media.stream_arn
+  function_name     = aws_lambda_function.stream.arn
+  starting_position = "LATEST"
+  batch_size        = 10
+}
+
 # Archive
 data "archive_file" "placeholder" {
   type        = "zip"
@@ -321,6 +379,11 @@ data "archive_file" "placeholder" {
 
   source {
     filename = "aws_emulator_proj/delete_handler.py"
+    content  = "def handler(event, context):\n    pass\n"
+  }
+
+  source {
+    filename = "aws_emulator_proj/stream_handler.py"
     content  = "def handler(event, context):\n    pass\n"
   }
 }
