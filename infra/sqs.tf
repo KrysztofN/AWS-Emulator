@@ -1,5 +1,5 @@
 resource "aws_sqs_queue" "uploads_dlq" {
-  name                      = "media-uploads-dlq"
+  name = "media-uploads-dlq"
 }
 
 resource "aws_sqs_queue" "uploads" {
@@ -29,7 +29,7 @@ resource "aws_sqs_queue_policy" "uploads" {
 }
 
 resource "aws_sqs_queue" "put_dlq" {
-  name                      = "media-put-dlq"
+  name = "media-put-dlq"
 }
 
 resource "aws_sqs_queue" "put" {
