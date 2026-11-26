@@ -46,6 +46,11 @@ resource "aws_iam_role_policy" "upload_lambda" {
         Resource = aws_sqs_queue.put.arn
       },
       {
+        Effect   = "Allow"
+        Action   = "cloudwatch:PutMetricData"
+        Resource = "*"
+      },
+      {
         Effect = "Allow"
         Action = [
           "logs:CreateLogGroup",
