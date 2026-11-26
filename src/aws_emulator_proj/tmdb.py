@@ -1,13 +1,15 @@
-import os
-
+import boto3
 import httpx
 
 BASE_URL = "https://api.themoviedb.org/3"
+TOKEN_PARAMETER = "/media/tmdb-read-token"
 
 
 class TmdbConfig:
     def __init__(self):
-        token = os.getenv("TMDB_READ_TOKEN")
+        ssm = boto3.client("ssm")
+        parameter = ssm.get_parameter(Name=TOKEN_PARAMETER, WithDecryption=True)
+        token = parameter["Parameter"]["Value"]
         if not token:
             raise ValueError("Missing environment variable TMDB_READ_TOKEN")
         self.read_token = token
