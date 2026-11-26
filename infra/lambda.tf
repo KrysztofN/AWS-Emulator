@@ -69,7 +69,7 @@ resource "aws_lambda_function" "upload" {
   runtime                        = "python3.12"
   handler                        = "aws_emulator_proj.upload_handler.handler"
   filename                       = data.archive_file.placeholder.output_path
-  timeout                        = 30
+  timeout                        = 60
   reserved_concurrent_executions = 1
 
   environment {
